@@ -1,0 +1,26 @@
+[
+  {
+    "title": "angular",
+    "anyKeywords": "angular, bootstrap",
+    "turnAnyKeyOn": null,
+    "allKeywords": null,
+    "excludingKeywords": "asd",
+    "location": null,
+    "minExp": "2",
+    "maxExp": "2",
+    "minSal": null,
+    "maxSal": null
+  },
+  {
+    "title": "angularjs",
+    "anyKeywords": "angular, bootstrap, java",
+    "turnAnyKeyOn": null,
+    "allKeywords": null,
+    "excludingKeywords": "asd",
+    "location": null,
+    "minExp": "2",
+    "maxExp": "2",
+    "minSal": null,
+    "maxSal": null
+  }
+]
