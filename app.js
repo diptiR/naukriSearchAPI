@@ -56,7 +56,7 @@ function appendEntry(skill) {
 
 app.post('/create-skill', function (req, res) {
     console.log(req.body);
-    fs.stat('myjsonfile.json', function (err, stat) {
+    fs.stat('skills.json', function (err, stat) {
         if (err == null) {
             // File exists
             appendEntry(req.body);
