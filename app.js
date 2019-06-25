@@ -29,11 +29,12 @@ app.use(bodyParser.json());
 app.get('/', function (req, res) {
     res.send("HELLO WORLD");
 });
+
 let obj = [];
 function firstEntry(skill) {
     obj.push(skill);
     var json = JSON.stringify(obj);
-    fs.writeFile('skills.json', json, 'utf8', function callback(err, data) {
+    fs.writeFile('./skills.json', json, 'utf8', function callback(err, data) {
         if (err) return console.error(err);
     });
 }
@@ -42,9 +43,8 @@ function appendEntry(skill) {
     fs.readFile('skills.json', 'utf8', function readFileCallback(err, data) {
         if (err) {
             firstEntry()
-            console.log(err);
         } else {
-            obj = JSON.parse(data); //now it an object
+            obj = data ? JSON.parse(data) : []; //now it an object
             obj.push(skill); //add some data
             json = JSON.stringify(obj); //convert it back to json
             fs.writeFile('skills.json', json, 'utf8', function callback(err, data) {
@@ -55,7 +55,6 @@ function appendEntry(skill) {
 }
 
 app.post('/create-skill', function (req, res) {
-    console.log(req.body);
     fs.stat('skills.json', function (err, stat) {
         if (err == null) {
             // File exists
@@ -68,6 +67,45 @@ app.post('/create-skill', function (req, res) {
         }
     });
     res.end("yes");
+});
+
+function getSkills() {
+    let skills;
+    return fs.readFile('skills.json', 'utf8', function readFileCallback(err, data) {
+        skills = data ? JSON.parse(data) : []; //now it an object   
+        return skills
+    });
+}
+
+app.get('/skills', function (req, res) {
+    let skills_res;
+    fs.stat('skills.json', function (err, stat) {
+        if (err == null) {
+            // File exists
+            fs.readFile('skills.json', 'utf8', function readFileCallback(err, data) {
+                skills_res = data ? JSON.parse(data) : []; //now it an object  
+                res.json(skills_res);
+            });
+        } else {
+            res.json([]);
+        }
+    });
+});
+
+app.post('/search-skill', function (req, res) {
+    //gets the seatch parameter from angular
+    param = req.body;
+
+    res.send("Hi!");
+    var child = require('child_process').spawn('java', ['-cp', param + '.jar', param]);
+
+    child.stdout.on('data', function (data) {
+        console.log(data.toString());
+    });
+
+    child.stderr.on("data", function (data) {
+        console.log(data.toString());
+    });
 });
 
 app.listen(3000);
