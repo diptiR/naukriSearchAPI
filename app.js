@@ -2,7 +2,7 @@ var fs = require('fs');
 var express = require('express');
 const bodyParser = require("body-parser");
 var app = express();
-
+var properties = require('properties');
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -56,12 +56,15 @@ function appendEntry(skill) {
 
 app.post('/create-skill', function (req, res) {
     fs.stat('skills.json', function (err, stat) {
+        let skillJson = req.body;
         if (err == null) {
-            // File exists
-            appendEntry(req.body);
+            // File exists            
+            skillJson.propertiesFile = writeProperties(skillJson);
+            appendEntry(skillJson);
         } else if (err.code === 'ENOENT') {
-            // file does not exist
-            firstEntry(req.body);
+            // file does not exist            
+            skillJson.propertiesFile = writeProperties(skillJson);
+            firstEntry(skillJson);
         } else {
             console.log('Some other error: ', err.code);
         }
@@ -69,12 +72,16 @@ app.post('/create-skill', function (req, res) {
     res.end("yes");
 });
 
-function getSkills() {
-    let skills;
-    return fs.readFile('skills.json', 'utf8', function readFileCallback(err, data) {
-        skills = data ? JSON.parse(data) : []; //now it an object   
-        return skills
+function writeProperties(jsonObj) {
+    let name = jsonObj.title.replace(/\s/g, '') + '.properties';
+    properties.stringify(jsonObj, { path: name }, function (error, obj) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(obj);
+        }
     });
+    return name;
 }
 
 app.get('/skills', function (req, res) {
