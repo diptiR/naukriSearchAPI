@@ -69,7 +69,7 @@ app.post('/create-skill', function (req, res) {
             console.log('Some other error: ', err.code);
         }
     });
-    res.end("yes");
+    res.send({"success": true});
 });
 
 function writeProperties(jsonObj) {
