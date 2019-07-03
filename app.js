@@ -74,7 +74,7 @@ app.post('/create-skill', function (req, res) {
 
 function writeProperties(jsonObj) {
     let name = jsonObj.title.replace(/\s/g, '') + '.properties';
-    properties.stringify(jsonObj, { path: name }, function (error, obj) {
+    properties.stringify(jsonObj, { path: 'properties/' + name }, function (error, obj) {
         if (error) {
             console.log(error);
         } else {
